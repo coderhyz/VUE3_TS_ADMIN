@@ -172,6 +172,8 @@ const handleSizeChange = () => {
  * */
 const addTrademark = () => {
     dialogVisible.value = true
+    // 清除表单校验信息
+    trademarkForm.value.clearValidate()
     //清空收集数据
     trademarkParams.id = 0;
     trademarkParams.tmName = '';
@@ -212,8 +214,10 @@ const handleConfirm = async () => {
  * @param response 
  */
 const handleAvatarSuccess: UploadProps['onSuccess'] = (
-    response
+    response,
+    inputFile,
 ) => {
+    // 
     const newLogoUrl = response.data.replace(/^\/api/, '')
     trademarkParams.logoUrl = import.meta.env.VITE_APP_BASE_API + newLogoUrl
     nextTick(() => {
