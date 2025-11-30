@@ -16,7 +16,7 @@
             </el-table-column>
             <el-table-column label="品牌操作">
                 <!-- 作用域插槽 -->
-                <template #default="{ row, $index }">
+                <template #default="{ row }">
                     <el-button type="primary" icon="Edit" @click="handleEdit(row)"></el-button>
                     <el-popconfirm title="是否确认删除该品牌？" confirm-button-text="确认" cancel-button-text="取消" width="200px"
                         @confirm="handleDelete(row.id)">
@@ -105,7 +105,7 @@ const trademarkForm = ref<any>(null);
 /**
  * 校验品牌名
  */
-const validateTmName = (rule: any, value: any, callback: any) => {
+const validateTmName = (_rule: any, value: any, callback: any) => {
     const regTmName = /^[\u4e00-\u9fa5]{2,}$/
     if (regTmName.test(value.trim())) {
         callback()
@@ -116,7 +116,7 @@ const validateTmName = (rule: any, value: any, callback: any) => {
 /**
  * 校验logoUrl
  */
-const validateLogoUrl = (rule: any, value: any, callback: any) => {
+const validateLogoUrl = (_rule: any, value: any, callback: any) => {
     if (value) {
         callback()
     } else {
@@ -173,7 +173,9 @@ const handleSizeChange = () => {
 const addTrademark = () => {
     dialogVisible.value = true
     // 清除表单校验信息
-    trademarkForm.value.clearValidate()
+    nextTick(() => {
+        trademarkForm.value?.clearValidate()
+    })
     //清空收集数据
     trademarkParams.id = 0;
     trademarkParams.tmName = '';
@@ -186,15 +188,29 @@ const addTrademark = () => {
 const handleCancel = () => {
     dialogVisible.value = false
     // 清除表单校验信息
-    trademarkForm.value.clearValidate()
+    trademarkForm.value?.clearValidate()
+}
+/**
+ * 校验表单
+ */
+const validateTrademarkForm = async () => {
+    if (!trademarkForm.value) return false
+    try {
+        await trademarkForm.value.validate()
+        return true
+    } catch (err) {
+        return false
+    }
 }
 /**
  * 点击确定按钮添加/修改品牌
  * */
 const handleConfirm = async () => {
-    await trademarkForm.value.validate()
+    const isValid = await validateTrademarkForm()
+    if (!isValid) {
+        return
+    }
     try {
-
         // 修改或者添加品牌
         const res = await reqAddTrademarkOrUpdateTrademark(trademarkParams)
         if (res.code == 200) {
@@ -209,22 +225,7 @@ const handleConfirm = async () => {
         dialogVisible.value = false
     }
 }
-/**
- * 添加图片后的回调
- * @param response 
- */
-const handleAvatarSuccess: UploadProps['onSuccess'] = (
-    response,
-    inputFile,
-) => {
-    // 
-    const newLogoUrl = response.data.replace(/^\/api/, '')
-    trademarkParams.logoUrl = import.meta.env.VITE_APP_BASE_API + newLogoUrl
-    nextTick(() => {
-        // 清除表单校验信息
-        trademarkForm.value.clearValidate(['logoUrl'])
-    })
-}
+
 /**
  * 
  * @param rawFile 
@@ -235,11 +236,26 @@ const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
     if (rawFile.type !== 'image/jpeg' && rawFile.type !== 'image/png') {
         ElMessage.error('上传的图片必须是 JPG 或 PNG 格式!')
         return false
-    } else if (rawFile.size / 1024 / 1024 > 20) {
-        ElMessage.error('上传的图片大小要小于 20MB!')
+    } else if (rawFile.size / 1024 / 1024 > 4) {
+        ElMessage.error('上传的图片大小要小于 4MB!')
         return false
     }
     return true
+}
+/**
+ * 添加图片后的回调
+ * @param response 
+ */
+const handleAvatarSuccess: UploadProps['onSuccess'] = (
+    response,
+) => {
+    // 请求接口返回的数据
+    const newLogoUrl = response.data.replace(/^\/api/, '')
+    trademarkParams.logoUrl = import.meta.env.VITE_APP_BASE_API + newLogoUrl
+    nextTick(() => {
+        // 清除表单校验信息
+        trademarkForm.value?.clearValidate(['logoUrl'])
+    })
 }
 /**
  * 更新品牌
@@ -259,7 +275,7 @@ const handleDelete = async (id: number) => {
         if (res.code === 200) {
             ElMessage.success('删除品牌成功')
             // 删除成功后重新获取品牌列表
-            // 判断当前页是否还有数据
+            // 判断当前页是否还有数据 ,如果只剩一个数据且不是第一页，则页码-1
             if (trademarkList.value.length === 1 && pageNo.value > 1) {
                 pageNo.value -= 1
             }

@@ -3,10 +3,12 @@ import SvgIcons from './SvgIcon/SvgIcons.vue';
 import type { App, Component } from "vue";
 //导入Element图标
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
+import Category from './Category/Category.vue';
 // ts语法
 // [name: string]: Component 定义了任意属性取 string 类型的值
 const components: { [name: string]: Component } = {
     SvgIcons,
+    Category
 };
 // 对外暴露插件对象
 export default {
@@ -15,6 +17,7 @@ export default {
             const component = components[key];
             // 如果组件存在
             if (component) {
+                // 全局注册components组件
                 app.component(key, component);
             }
         });
