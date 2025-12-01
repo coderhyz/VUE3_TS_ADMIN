@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import type { AttrCategoryResponseData, AttrInfoResponseData } from './type'
 //商品分类接口
 const ATTR_API = {
     //一级分类请求地址
@@ -7,16 +8,22 @@ const ATTR_API = {
     C2_URL: "/admin/product/getCategory2",
     //三级分类请求地址
     C3_URL: "/admin/product/getCategory3",
+    // 获取分类下已有的属性与属性值
+    ATTR_INFO_URL: "/admin/product/attrInfoList",
 }
 //获取一级分类数据
 export const reqCategory1List = () => {
-    return request.get<any, any>(ATTR_API.C1_URL)
+    return request.get<any, AttrCategoryResponseData>(ATTR_API.C1_URL)
 }
 //获取二级分类数据
 export const reqCategory2List = (category1Id: number | string) => {
-    return request.get<any, any>(`${ATTR_API.C2_URL}/${category1Id}`)
+    return request.get<any, AttrCategoryResponseData>(`${ATTR_API.C2_URL}/${category1Id}`)
 }
 //获取三级分类数据
 export const reqCategory3List = (category2Id: number | string) => {
-    return request.get<any, any>(`${ATTR_API.C3_URL}/${category2Id}`)
+    return request.get<any, AttrCategoryResponseData>(`${ATTR_API.C3_URL}/${category2Id}`)
+}
+// 获取分类下已有的属性与属性值
+export const reqAttrInfoList = (category1Id: number | string, category2Id: number | string, category3Id: number | string) => {
+    return request.get<any, AttrInfoResponseData>(`${ATTR_API.ATTR_INFO_URL}/${category1Id}/${category2Id}/${category3Id}`)
 }
