@@ -26,17 +26,20 @@ watch(() => settingStore.isRefresh, () => {
 </script>
 
 <style lang="scss" scoped>
-.fade-enter-from {
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
     opacity: 0;
-    transform: scale(0);
+    transform: translateX(-16px);
 }
 
-.fade-enter-active {
-    transition: all 1s;
-}
-
-.fade-enter-to {
+.fade-enter-to,
+.fade-leave-from {
     opacity: 1;
-    transform: scale(1);
+    transform: translateX(0);
 }
 </style>

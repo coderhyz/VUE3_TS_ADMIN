@@ -15,8 +15,8 @@ export interface AttrCategoryData {
 }
 // 商品属性值
 export interface AttrValue {
-    attrId: number;
-    id: number;
+    attrId?: number;
+    id?: number;
     valueName: string;
 }
 export type attrValueList = AttrValue[]
@@ -25,7 +25,7 @@ export interface Attr {
     attrValueList: attrValueList;
     categoryId: number;
     categoryLevel: number;
-    id: number;
+    id?: number;
 }
 // 接口返回响应的属性与属性值数据类型
 export interface AttrInfoResponseData extends ResponseData {

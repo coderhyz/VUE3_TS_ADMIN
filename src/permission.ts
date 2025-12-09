@@ -37,7 +37,10 @@ router.beforeEach(async (to, from, next) => {
                 } catch (error) {
                     // token失效了
                     await userStore.userLogout()
-                    next({ path: '/login', query: { redirect: to.path } }) // 将要访问的路由路径作为参数传递给登录页
+                    next({
+                        path: '/login',
+                        query: { redirect: to.path } // 将要访问的路由路径作为参数传递给登录页
+                    })
                 }
             }
         }
@@ -48,7 +51,6 @@ router.beforeEach(async (to, from, next) => {
          * 并且把想访问的路由路径作为参数传递给登录页，登录成功后跳转回该路径
          */
         if (to.path === '/login') {
-            // 
             next()
         } else {
             next({

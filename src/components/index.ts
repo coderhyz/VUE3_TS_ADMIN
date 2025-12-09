@@ -1,5 +1,6 @@
 // 用于注册component的所有组件 插件
 import SvgIcons from './SvgIcon/SvgIcons.vue';
+// 
 import type { App, Component } from "vue";
 //导入Element图标
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'

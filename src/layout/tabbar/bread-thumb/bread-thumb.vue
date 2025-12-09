@@ -8,6 +8,7 @@
     </el-icon>
     <!-- 左侧面包屑 -->
     <el-breadcrumb separator-icon="ArrowRight" class="bread-thumb-lg">
+        <!-- 匹配的路由 -->
         <template v-for="item in route.matched" :key="item.path">
             <el-breadcrumb-item v-if="item.meta.title" :to="item.path">
                 <el-icon>

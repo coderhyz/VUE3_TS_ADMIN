@@ -1,11 +1,11 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-
 // 导入全局组件
 import gloablComponent from './components'
 import router from './router'
 // 注册仓库
 import pinia from './store'
+// 引入svg图标注册脚本
 import 'virtual:svg-icons-register'
 const app = createApp(App)
 // 使用全局组件

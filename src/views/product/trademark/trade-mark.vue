@@ -97,10 +97,10 @@ const trademarkList = ref<TrademarkList>([]);
 const dialogVisible = ref<boolean>(false)
 // 要添加的品牌参数
 const trademarkParams = reactive<Trademark>({
-    tmName: '',
-    logoUrl: ''
+    tmName: '', //品牌名称
+    logoUrl: ''//品牌logo地址
 })
-// 表单ref
+// 添加/修改品牌表单ref实例
 const trademarkForm = ref<any>(null);
 /**
  * 校验品牌名

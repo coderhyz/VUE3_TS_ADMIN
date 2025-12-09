@@ -4,9 +4,11 @@
 ::-webkit-scrollbar{
     width: 10px;
 }
+// 滚动条滑块
 ::-webkit-scrollbar-track{
     background-color: $base-menu-color;
 }
+// 滚动条滑块样式
 ::-webkit-slider-thumb{
     width: 10px;
     background-color: yellowgreen;
